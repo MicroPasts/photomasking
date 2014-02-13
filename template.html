@@ -165,8 +165,20 @@ pybossa.taskLoaded(function(task, deferred) {
             return task.styleArray;
           }
         });
+
+        task.overlay = new ol.FeatureOverlay({
+            //styleFunction: overlayStyle
+        });
+
+        task.modify = new ol.interaction.Modify({ 
+                                                layer: task.vector,
+                                                featureOverlay: task.overlay });
+        task.select = new ol.interaction.Select({ 
+                                                layer: task.vector,
+                                                featureOverlay: task.overlay });
         
         task.map = new ol.Map({
+          //interactions: ol.interaction.defaults().extend([task.select, task.modify]),
           layers: [
             new ol.layer.Image({
               source: new ol.source.ImageStatic({
@@ -196,12 +208,19 @@ pybossa.taskLoaded(function(task, deferred) {
 
         var typeSelect = document.getElementById('type');
         
-        var draw; // global so we can remove it later
-        draw = new ol.interaction.Draw({
+        //task.draw; // global so we can remove it later
+        task.draw = new ol.interaction.Draw({
           source: task.source,
           type: 'Polygon',
         });
-        task.map.addInteraction(draw);
+        // When the first polygon is completed, remove the drawInteraction
+        task.draw.on('drawend', function(evt) {
+                task.map.removeInteraction(task.draw);
+                task.map.addInteraction(task.select);
+                task.map.addInteraction(task.modify);
+                });
+
+        task.map.addInteraction(task.draw);
 
         task.answer = {
                  'task_id': task.id,
