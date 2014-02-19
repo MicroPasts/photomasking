@@ -159,10 +159,25 @@ pybossa.taskLoaded(function(task, deferred) {
         
         task.vector = new ol.layer.Vector({
           source: task.source,
-          styleFunction: function(feature, resolution) {
-            return task.styleArray;
-          }
-        });
+          //styleFunction: function(feature, resolution) {
+          //  return task.styleArray;
+          //}
+          style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                      color: 'rgba(255, 255, 255, 0.2)'
+                    }),
+                    stroke: new ol.style.Stroke({
+                      color: '#ffcc33',
+                      width: 2
+                    }),
+                    image: new ol.style.Circle({
+                      radius: 7,
+                      fill: new ol.style.Fill({
+                        color: '#ffcc33'
+                        })
+                      })
+                    })
+          });
 
         var overlayStyle = (function() {
             var styles = {};
