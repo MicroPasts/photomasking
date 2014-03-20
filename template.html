@@ -825,6 +825,7 @@ pybossa.presentTask(function(task, deferred) {
                     for(i=0;i<features.length;i++) {
                         task.source.removeFeature(features[i]);
                     }
+                    task.polygon = false;
                 }
 
                 }});
@@ -840,17 +841,20 @@ pybossa.presentTask(function(task, deferred) {
 
                 if (task.polygon) {
                     var features = task.source.getAllFeatures();
+                    var polygons = [];
                     for(i=0;i<features.length;i++) {
                         var g = features[i].getGeometry();
-                        task.answer = {
-                            'task_id': task.id,
-                            'polygon': g.getCoordinates(),
-                            'img': task.info.url_b};
+                        polygons.push(g.getCoordinates());
                     }
-                    //pybossa.saveTask(task.id, task.answer).done(function() {
-                    //    deferred.resolve();
-                    //    $("#map_" + task.id).remove();
-                    //});
+                    task.answer = {
+                        'task_id': task.id,
+                        'polygon': polygons,
+                        'img': task.info.url_b};
+
+                    pybossa.saveTask(task.id, task.answer).done(function() {
+                        deferred.resolve();
+                        $("#map_" + task.id).remove();
+                    });
                     $("#loading").fadeIn(500);
                     if ($("#disqus_thread").is(":visible")) {
                         $('#disqus_thread').toggle();
