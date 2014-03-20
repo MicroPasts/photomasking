@@ -721,18 +721,18 @@ pybossa.taskLoaded(function(task, deferred) {
             styles['Polygon'] = [
               new ol.style.Style({
                 fill: new ol.style.Fill({
-                  color: [255, 255, 255, 0.5]
+                  color: [255, 0, 0, 0.5]
                 })
               }),
               new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                  color: [255, 255, 255, 1],
+                  color: [255, 0, 0, 1],
                   width: 5
                 })
               }),
               new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                  color: [0, 153, 255, 1],
+                  color: [255, 0, 0, 1],
                   width: 3
                 })
               })
@@ -742,13 +742,13 @@ pybossa.taskLoaded(function(task, deferred) {
             styles['LineString'] = [
               new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                  color: [255, 255, 255, 1],
+                  color: [255, 0, 0, 1],
                   width: 5
                 })
               }),
               new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                  color: [0, 153, 255, 1],
+                  color: [255, 0, 0, 1],
                   width: 3
                 })
               })
@@ -780,7 +780,22 @@ pybossa.taskLoaded(function(task, deferred) {
         })();
 
         task.overlay = new ol.FeatureOverlay({
-            styleFunction: overlayStyle
+            //styleFunction: overlayStyle,
+            style: new ol.style.Style({
+                  fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.2)'
+                      }),
+                      stroke: new ol.style.Stroke({
+                        color: [0, 153, 255, 1],
+                        width: 2
+                      }),
+                      image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({
+                          color: [0, 153, 255, 1]
+                          })
+                        })
+                      })
         });
 
         task.modify = new ol.interaction.Modify({ 
@@ -853,7 +868,7 @@ pybossa.presentTask(function(task, deferred) {
         $('#task-id').html(task.id);
         $("#map_" + task.id).show();
 
-
+        // Code for editing/drawing polygons
         $('.btn-draw').off('click').on('click', function(evt) {
             var answer = $(evt.target).attr("value");
             if (typeof answer != 'undefined'){
