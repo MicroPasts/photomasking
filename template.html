@@ -579,6 +579,7 @@ vj.prototype.getTileSize=vj.prototype.ka;G("ol.tilegrid.WMTS",Yr);Yr.prototype.g
         <div class="btn-group">
             <button type="button" class="btn btn-default btn-draw" name="draw" value="draw">Draw</button>
             <button type="button" class="btn btn-default btn-draw" name="edit" value="edit">Edit</button>
+            <button type="button" class="btn btn-default btn-draw" name="delete" value="delete">Remove all polygons</button>
         </div>
     </div>
 </div>
@@ -716,71 +717,7 @@ pybossa.taskLoaded(function(task, deferred) {
                     })
           });
 
-        var overlayStyle = (function() {
-            var styles = {};
-            styles['Polygon'] = [
-              new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: [255, 0, 0, 0.5]
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 0, 0, 1],
-                  width: 5
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 0, 0, 1],
-                  width: 3
-                })
-              })
-            ];
-            styles['MultiPolygon'] = styles['Polygon'];
-
-            styles['LineString'] = [
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 0, 0, 1],
-                  width: 5
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 0, 0, 1],
-                  width: 3
-                })
-              })
-            ];
-            styles['MultiLineString'] = styles['LineString'];
-
-            styles['Point'] = [
-              new ol.style.Style({
-                image: new ol.style.Circle({
-                  radius: 7,
-                  fill: new ol.style.Fill({
-                    color: [0, 153, 255, 1]
-                  }),
-                  stroke: new ol.style.Stroke({
-                    color: [255, 255, 255, 0.75],
-                    width: 1.5
-                  })
-                }),
-                zIndex: 100000
-              })
-            ];
-            styles['MultiPoint'] = styles['Point'];
-
-            styles['GeometryCollection'] = styles['Polygon'].concat(styles['Point']);
-
-            return function(feature, resolution) {
-              return styles[feature.getGeometry().getType()];
-            };
-        })();
-
         task.overlay = new ol.FeatureOverlay({
-            //styleFunction: overlayStyle,
             style: new ol.style.Style({
                   fill: new ol.style.Fill({
                         color: 'rgba(255, 255, 255, 0.2)'
@@ -804,7 +741,7 @@ pybossa.taskLoaded(function(task, deferred) {
         task.select = new ol.interaction.Select({ 
                                                 layer: task.vector,
                                                 featureOverlay: task.overlay });
-        
+
         task.map = new ol.Map({
           //interactions: ol.interaction.defaults().extend([task.select, task.modify]),
           layers: [
@@ -882,6 +819,14 @@ pybossa.presentTask(function(task, deferred) {
                     task.map.addInteraction(task.select);
                     task.map.addInteraction(task.modify);
                 }
+
+                if (answer == 'delete') {
+                    var features = task.source.getAllFeatures();
+                    for(i=0;i<features.length;i++) {
+                        task.source.removeFeature(features[i]);
+                    }
+                }
+
                 }});
 
 
@@ -891,6 +836,7 @@ pybossa.presentTask(function(task, deferred) {
             if (typeof answer != 'undefined'){
                 //console.log(answer);
                 //console.log(task.map.source.features);
+                console.log(task.source.features);
 
                 if (task.polygon) {
                     var features = task.source.getAllFeatures();
