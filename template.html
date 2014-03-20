@@ -829,9 +829,6 @@ pybossa.taskLoaded(function(task, deferred) {
 
         // When the first polygon is completed, remove the drawInteraction
         task.draw.on('drawend', function(evt) {
-                //task.map.removeInteraction(task.draw);
-                //task.map.addInteraction(task.select);
-                //task.map.addInteraction(task.modify);
                 task.polygon = true;
                 $("#btn-save").removeClass("disabled");
                 });
