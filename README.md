@@ -29,6 +29,16 @@ Documentation
 
 We recommend that you read the section: [Build with PyBossa](http://docs.pybossa.com/en/latest/build_with_pybossa.html) and follow the [step by step tutorial](http://docs.pybossa.com/en/latest/user/tutorial.html).
 
+Adding pictures from a folder in an S3 bucket
+=============================================
+
+This application supports public S3 buckets. Adding pictures/photos from
+a folder in a S3 bucket is as simple as the following command:
+
+```bash
+    $ python createTasks.py -s server -k api-key -x -b "folder/in/s3/"
+```
+
 **NOTE**: This application uses the [pybossa-client](https://pypi.python.org/pypi/pybossa-client) in order to simplify the development of the application and its usage. Check the [documentation](http://pythonhosted.org/pybossa-client/).
 
 
