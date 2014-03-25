@@ -1,7 +1,7 @@
 {
     "name": "Photo Masking",
     "short_name": "photomasking",
-    "thumbnail": "http://imageshack.us/a/img37/156/flickrpersonthumbnail.png",
-    "description": "Image pattern recognition",
-    "question": "Do you see a real human face in this photo?"
+    "thumbnail": "http://i.imgur.com/IXNYFM2.png",
+    "description": "Photo masking application",
+    "question": "Draw the outline and/or holes of the main object in the picture"
 }
