@@ -1,0 +1,81 @@
+<div id="modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+            <div class="modal-header">
+                <h3>Photo-masking tutorial for 3D modelling </h3>
+            </div>
+            <div id="0" class="modal-body" style="display:none">
+                <p>
+                    This application is very simple. When you participate,
+                    the platform will load a photograph of an archaeological artefact.
+                    Once the image has been loaded, you will be asked
+  to click or tap around the edge of the artefact in order to define a
+  polygon outline. Click once every time you wish to add a point along
+  the edge of the polygon and yor final point will snap back onto the
+  one you started with. In general, we would prefer you to draw ou polygon
+  very slightly INSIDE the actual edge of the artefact. This is
+  because we don't want background pixels near this edge to create a
+  fuzzy border, and we don't need to worry so much about losign a bit
+  of the artefact edge as the missing few pixels are very likely to
+  appear in one of the other photogrpahs (at least 40 overlapping photographs are
+  likely to exist for each object to support the construction of the
+  3d model). An example of a successful outline made up two
+  overlapping polygons is shown below (it could also have been done as just one polygon).
+                </p>
+                <img src="http://farm8.staticflickr.com/7358/12171450486_3c097e993b_z.jpg" class="img-polaroid"
+                     alt="An example of an artefact photograph whose outline has been defined by two overlapping polygons." width="100%" height="449"/>
+            </div>
+
+            <div id="1" class="modal-body" style="display:none">
+                <p>
+                In a few cases, there might be one or more holes
+                in the object shown in the photograph, and you will
+                be given an opportunity to draw these holes in a
+                second step, after you have created the initial outline
+                around the object. During the task, you can always return to this tutorial via the "Help" button. 
+                </p>
+            	<p>
+                To find out how the project is progressing, to suggest
+                changes to this application or to propose new research
+	      ideas based what you have transcribed, please have a look at
+                our <a href="http://community.micropasts.org" title="Community forum">community forum</a>.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn btn-default">Previous</a>
+                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success">Next</a>
+                <a id="startContrib" href="../photomasking/newtask" class="btn btn-primary" style="display:none"><i class="glyphicon glyphicon-thumbs-up"></i> Let's start!</a>
+            </div>
+      </div>
+</div>
+</div>
+
+
+<script>
+    var step = -1;
+    function showStep(action) {
+        $("#" + step).hide();
+        if (action == 'next') {
+            step = step + 1;
+        }
+        if (action == 'prev') {
+            step = step - 1;
+        }
+        if (step == 0) {
+            $("#prevBtn").hide();
+        }
+        else {
+            $("#prevBtn").show();
+        }
+
+        if (step == 1 ) {
+            $("#nextBtn").hide();
+            $("#startContrib").show();
+        }
+        $("#" + step).show();
+    }
+
+    showStep('next');
+    $("#modal").modal('show');
+</script>
