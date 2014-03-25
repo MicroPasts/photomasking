@@ -620,6 +620,7 @@ vj.prototype.getTileSize=vj.prototype.ka;G("ol.tilegrid.WMTS",Yr);Yr.prototype.g
     <div class="span12">
         <h1 id="step1">Draw the outline and/or holes of the main object shown in the picture</h1>
         <div class="btn-group">
+            <button id="status" type="button" class="btn btn-default btn-type disabled" name="loading" value="loading">Loading photo</button>
             <button id="outline" type="button" class="btn btn-default btn-type active" name="outline" value="outline">Outline</button>
             <button id="holes" type="button" class="btn btn-default btn-type" name="holes" value="holes">Holes</button>
         </div>
@@ -737,14 +738,25 @@ pybossa.taskLoaded(function(task, deferred) {
         var div_map = $('<div/>');
         div_map.css("height", "400px");
         div_map.css("width", "100%");
-
+        $("#draw").addClass("disabled");
+        $("#edit").addClass("disabled");
+        $("#delete").addClass("disabled");
+        $("#outline").addClass("disabled");
+        $("#holes").addClass("disabled");
         $("#map").append(div_map);
         div_map.attr("id", "map_" + task.id);
         img.load(function() {
             // continue as soon as the image is loaded
             deferred.resolve(task);
+            $("#draw").removeClass("disabled");
+            $("#edit").removeClass("disabled");
+            $("#delete").removeClass("disabled");
+            $("#outline").removeClass("disabled");
+            $("#holes").removeClass("disabled");
+            $("#status").text("Photo loaded!");
         });
         img.attr('src', task.info.url_b).css('height', 460);
+        console.log(task.info.url_b);
         img.addClass('img-polaroid');
         task.info.image = img;
 
@@ -754,7 +766,7 @@ pybossa.taskLoaded(function(task, deferred) {
         task.pixelProjection = new ol.proj.Projection({
           code: 'pixel',
           units: 'pixels',
-          extent: [0, 0, 1024, 1024]
+          extent: [0, 0, 5184, 3456]
         });
 
         task.styleArray = [new ol.style.Style({
@@ -865,7 +877,7 @@ pybossa.taskLoaded(function(task, deferred) {
                   })
                 ],
                 url: task.info.url_b,
-                imageSize: [1024, 1024],
+                imageSize: [5184, 3456],
                 projection: task.pixelProjection,
                 imageExtent: task.pixelProjection.getExtent()
               })
@@ -879,7 +891,7 @@ pybossa.taskLoaded(function(task, deferred) {
           view: new ol.View2D({
             projection: task.pixelProjection,
             center: ol.extent.getCenter(task.pixelProjection.getExtent()),
-            zoom: 3
+            zoom: 2
           })
         });
         div_map.css("display", "none");
