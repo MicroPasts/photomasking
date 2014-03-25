@@ -578,13 +578,13 @@ vj.prototype.getTileSize=vj.prototype.ka;G("ol.tilegrid.WMTS",Yr);Yr.prototype.g
         <h1 id="step1">Draw the outline of the main object shown in the picture</h1>
         <h1 id="step2" style="display:none">Draw the holes of the main object shown in the picture</h1>
         <div class="btn-group">
-            <button id="outline" type="button" class="btn btn-default btn-type active" name="outline" value="outline">Draw outline</button>
-            <button id="holes" type="button" class="btn btn-default btn-type" name="holes" value="holes">Draw holes</button>
+            <button id="outline" type="button" class="btn btn-default btn-type active" name="outline" value="outline">Outline</button>
+            <button id="holes" type="button" class="btn btn-default btn-type" name="holes" value="holes">Holes</button>
         </div>
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-draw" name="draw" value="draw">Draw</button>
-            <button type="button" class="btn btn-default btn-draw" name="edit" value="edit">Edit</button>
-            <button type="button" class="btn btn-default btn-draw" name="delete" value="delete">Remove all polygons</button>
+            <button id="draw" type="button" class="btn btn-default btn-draw active" name="draw" value="draw">Draw</button>
+            <button id="edit" type="button" class="btn btn-default btn-draw" name="edit" value="edit">Edit</button>
+            <button id="delete" type="button" class="btn btn-default btn-draw" name="delete" value="delete">Remove all polygons</button>
         </div>
     </div>
 </div>
@@ -772,15 +772,15 @@ pybossa.taskLoaded(function(task, deferred) {
                                                 featureOverlay: task.overlay });
 
         // Modifiers for vector holes
-        task.modify = new ol.interaction.Modify({ 
+        task.modify_holes = new ol.interaction.Modify({ 
                                                 layer: task.holes,
                                                 featureOverlay: task.overlay });
-        task.select = new ol.interaction.Select({ 
+        task.select_holes = new ol.interaction.Select({ 
                                                 layer: task.holes,
                                                 featureOverlay: task.overlay });
 
         task.map = new ol.Map({
-          //interactions: ol.interaction.defaults().extend([task.select, task.modify]),
+          //interactions: ol.interaction.defaults().extend([task.select, task.modify, task.select_holes, task.modify_holes]),
           layers: [
             new ol.layer.Image({
               source: new ol.source.ImageStatic({
@@ -872,22 +872,59 @@ pybossa.presentTask(function(task, deferred) {
             var answer = $(evt.target).attr("value");
             if (typeof answer != 'undefined'){
                 if (answer == 'draw') {
-                    task.map.removeInteraction(task.modify);
-                    task.map.removeInteraction(task.select);
-                    task.map.addInteraction(task.draw);
+                    $("#edit").removeClass("active");
+                    $("#draw").addClass("active");
+                    if ($("#outline").hasClass("active")) {
+                        task.map.removeInteraction(task.modify);
+                        task.map.removeInteraction(task.select);
+                        task.map.addInteraction(task.draw);
+                    }
+                    else {
+                        task.map.removeInteraction(task.modify_holes);
+                        task.map.removeInteraction(task.select_holes);
+                        task.map.addInteraction(task.draw_holes);
+                    }
                 }
                 if (answer == 'edit') {
-                    task.map.removeInteraction(task.draw);
-                    task.map.addInteraction(task.select);
-                    task.map.addInteraction(task.modify);
+                    $("#draw").removeClass("active");
+                    $("#edit").addClass("active");
+                    if ($("#outline").hasClass("active")) {
+                        task.map.removeInteraction(task.draw);
+                        task.map.addInteraction(task.select);
+                        task.map.addInteraction(task.modify);
+                    }
+                    else {
+                        task.map.removeInteraction(task.draw_holes);
+                        task.map.addInteraction(task.select_holes);
+                        task.map.addInteraction(task.modify_holes);
+                    }
                 }
 
                 if (answer == 'delete') {
-                    var features = task.source.getAllFeatures();
-                    for(i=0;i<features.length;i++) {
-                        task.source.removeFeature(features[i]);
+                    if ($("#outline").hasClass("active")) {
+                        $("#draw").removeClass("active");
+                        $("#edit").removeClass("active");
+                        $("#delete").addClass("active");
+                        var features = task.source.getAllFeatures();
+                        for(i=0;i<features.length;i++) {
+                            task.source.removeFeature(features[i]);
+                        }
+                        task.polygon = false;
+                        $("#draw").addClass("active");
+                        $("#delete").removeClass("active");
                     }
-                    task.polygon = false;
+                    else {
+                        $("#draw").removeClass("active");
+                        $("#edit").removeClass("active");
+                        $("#delete").addClass("active");
+                        var features = task.source_holes.getAllFeatures();
+                        for(i=0;i<features.length;i++) {
+                            task.source_holes.removeFeature(features[i]);
+                        }
+                        task.polygon = false;
+                        $("#draw").addClass("active");
+                        $("#delete").removeClass("active");
+                    }
                 }
 
                 }});
