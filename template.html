@@ -575,7 +575,12 @@ vj.prototype.getTileSize=vj.prototype.ka;G("ol.tilegrid.WMTS",Yr);Yr.prototype.g
 -->
 <div class="row skeleton">
     <div class="span12">
-        <h1>Draw the outline of the main object shown in the picture</h1>
+        <h1 id="step1">Draw the outline of the main object shown in the picture</h1>
+        <h1 id="step2" style="display:none">Draw the holes of the main object shown in the picture</h1>
+        <div class="btn-group">
+            <button id="outline" type="button" class="btn btn-default btn-type active" name="outline" value="outline">Draw outline</button>
+            <button id="holes" type="button" class="btn btn-default btn-type" name="holes" value="holes">Draw holes</button>
+        </div>
         <div class="btn-group">
             <button type="button" class="btn btn-default btn-draw" name="draw" value="draw">Draw</button>
             <button type="button" class="btn btn-default btn-draw" name="edit" value="edit">Edit</button>
@@ -694,6 +699,7 @@ pybossa.taskLoaded(function(task, deferred) {
         })];
         
         task.source = new ol.source.Vector();
+        task.source_holes = new ol.source.Vector();
         
         task.vector = new ol.layer.Vector({
           source: task.source,
@@ -717,6 +723,28 @@ pybossa.taskLoaded(function(task, deferred) {
                     })
           });
 
+        task.holes = new ol.layer.Vector({
+          source: task.source_holes,
+          //styleFunction: function(feature, resolution) {
+          //  return task.styleArray;
+          //}
+          style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                      color: 'rgba(255, 255, 255, 0.2)'
+                    }),
+                    stroke: new ol.style.Stroke({
+                      color: '#00CC99',
+                      width: 2
+                    }),
+                    image: new ol.style.Circle({
+                      radius: 7,
+                      fill: new ol.style.Fill({
+                        color: '#00CC99'
+                        })
+                      })
+                    })
+          });
+
         task.overlay = new ol.FeatureOverlay({
             style: new ol.style.Style({
                   fill: new ol.style.Fill({
@@ -735,11 +763,20 @@ pybossa.taskLoaded(function(task, deferred) {
                       })
         });
 
+        // Modifiers for vector outline
         task.modify = new ol.interaction.Modify({ 
                                                 layer: task.vector,
                                                 featureOverlay: task.overlay });
         task.select = new ol.interaction.Select({ 
                                                 layer: task.vector,
+                                                featureOverlay: task.overlay });
+
+        // Modifiers for vector holes
+        task.modify = new ol.interaction.Modify({ 
+                                                layer: task.holes,
+                                                featureOverlay: task.overlay });
+        task.select = new ol.interaction.Select({ 
+                                                layer: task.holes,
                                                 featureOverlay: task.overlay });
 
         task.map = new ol.Map({
@@ -759,7 +796,8 @@ pybossa.taskLoaded(function(task, deferred) {
               })
             })
           , 
-          task.vector
+          task.vector,
+          task.holes,
           ],
           renderer: 'canvas',
           target: 'map_' + task.id,
@@ -776,6 +814,11 @@ pybossa.taskLoaded(function(task, deferred) {
         //task.draw; // global so we can remove it later
         task.draw = new ol.interaction.Draw({
           source: task.source,
+          type: 'Polygon',
+        });
+
+        task.draw_holes = new ol.interaction.Draw({
+          source: task.source_holes,
           type: 'Polygon',
         });
 
@@ -804,6 +847,25 @@ pybossa.presentTask(function(task, deferred) {
         $("#btn-save").addClass("disabled");
         $('#task-id').html(task.id);
         $("#map_" + task.id).show();
+
+        // Code for drawing outlines or holes
+        $('.btn-type').off('click').on('click', function(evt) {
+            var answer = $(evt.target).attr("value");
+            if (typeof answer != 'undefined'){
+                if (answer == 'holes') {
+                    $("#outline").removeClass('active');
+                    $("#holes").addClass('active');
+                    task.map.removeInteraction(task.draw);
+                    task.map.addInteraction(task.draw_holes);
+                }
+                else {
+                    $("#holes").removeClass('active');
+                    $("#outline").addClass('active');
+                    task.map.addInteraction(task.draw);
+                    task.map.removeInteraction(task.draw_holes);
+                }
+            }
+        });
 
         // Code for editing/drawing polygons
         $('.btn-draw').off('click').on('click', function(evt) {
