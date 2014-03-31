@@ -21,6 +21,10 @@ except:
     print ("There should be a s3_settings.py file with the name \
            of the bucket with the photos.")
 
+def allowed_file(filename):
+    return '.' in filename and \
+              filename.rsplit('.', 1)[1] in s3_settings.ALLOWED_EXTENSIONS
+
 
 def get_s3_photos(folder):
     """
@@ -34,9 +38,10 @@ def get_s3_photos(folder):
     mybucket = conn.get_bucket(s3_settings.BUCKET)
     photos = []
     for photo in mybucket.list(prefix=folder):
-        link = dict(
-            url_b="http://%s.s3.amazonaws.com/%s" % (s3_settings.BUCKET,
-                                                     photo.name)
-        )
-        photos.append(link)
+        if allowed_file(photo.name.lower()):
+            link = dict(
+                url_b="http://%s.s3.amazonaws.com/%s" % (s3_settings.BUCKET,
+                                                         photo.name)
+            )
+            photos.append(link)
     return photos
