@@ -614,14 +614,13 @@ pybossa.presentTask(function(task, deferred) {
                     }
 
                     pybossa.saveTask(task.id, task.answer).done(function() {
+                    	$("#success").fadeIn(500).fadeOut(5500);
+                        
                         deferred.resolve();
                         $("#map_" + task.id).remove();
                     });
                     $("#loading").fadeIn(500);
-                    if ($("#disqus_thread").is(":visible")) {
-                        $('#disqus_thread').toggle();
-                        $('.btn-disqus').toggle();
-                    }
+                    
                 } // end if task.polygon
             }
             else {
