@@ -91,7 +91,7 @@ a.ol-full-screen-true:after {
     
         <div class="btn-group pull-right">
         		<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-eye-open"></i> Tutorial</button>
-        		<a class="btn btn-info btn-sm tooltip" id="imgLink" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="http://community.micropasts.org/category/crowdsourcing-support"><i class="glyphicon glyphicon-book"></i> Community Help</a>
+        		<a class="btn btn-info btn-sm" id="imgLink" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="http://community.micropasts.org/category/crowdsourcing-support"><i class="glyphicon glyphicon-book"></i> Community Help</a>
         </div>
         
         <h1 id="step1">Draw the outline and/or holes of the main object shown in the picture</h1>
@@ -581,7 +581,7 @@ pybossa.presentTask(function(task, deferred) {
         $("#loading").hide();
         $("#finish").fadeIn(500);
     }
-    $('.tooltip').tooltip();
+    $('#imgLink').tooltip();
 });
 
 pybossa.run('photomasking');
