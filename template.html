@@ -127,18 +127,7 @@ a.ol-full-screen-true:after {
 
         <div id="answer"> <!-- Start DIV for the submission buttons -->
         </div><!-- End of DIV for the submission buttons -->
-        <!-- 
-            This application uses Disqus to allow users to provide some feedback.
-            The next section includes a button that when a user clicks on it will
-            load the comments, if any, for the given task
-        -->
-        <div id="disqus_show_btn" style="margin-top:5px;">
-            <button class="btn btn-primary btn-large btn-disqus" onclick="loadDisqus()"><i class="icon-comments"></i> Show comments</button>
-            <button class="btn btn-large btn-disqus" onclick="loadDisqus()" style="display:none"><i class="icon-comments"></i> Hide comments</button>
-        </div><!-- End of Disqus Button section -->
-
-        <!-- Disqus thread for the given task -->
-        <div id="disqus_thread" style="margin-top:5px;display:none"></div>
+       
 
     </div><!-- End of Question and Submission DIV (column) -->
 
@@ -281,26 +270,6 @@ a.ol-full-screen-true:after {
     $("#modal").modal('show');
 </script>
 
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    function loadDisqus() {
-    $("#disqus_thread").toggle();
-    $(".btn-disqus").toggle();
-    var disqus_shortname = 'pybossa'; // required: replace example with your forum shortname
-    //var disqus_identifier = taskId;
-    var disqus_developer = 1;
-
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-    }
-
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 <script>
 function loadUserProgress() {
