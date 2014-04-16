@@ -23,6 +23,7 @@ from get_images import get_s3_photos
 import random
 import logging
 from requests import exceptions
+from time import sleep
 
 
 def contents(filename):
@@ -77,7 +78,7 @@ def handle_arguments():
                       dest="n_answers",
                       help="Number of answers per task",
                       metavar="N-ANSWERS",
-                      default=30)
+                      default=5)
 
     parser.add_option("-a", "--application-config",
                       dest="app_config",
@@ -166,7 +167,11 @@ def run(app_config, options):
         # For this, we get first the photo URLs from Flickr
         photos = get_s3_photos(options.s3_bucket_folder)
         question = app_config['question']
-        [create_photo_task(app, p, question, priority=random.random()) for p in photos]
+        #[create_photo_task(app, p, question, priority=random.random()) for p in photos]
+        for p in photos:
+            create_photo_task(app, p, question)
+            print "Creating task..."
+            sleep(4)
 
     pbclient.set('api_key', options.api_key)
     pbclient.set('endpoint', options.api_url)
