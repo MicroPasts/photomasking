@@ -92,6 +92,7 @@ a.ol-full-screen-true:after {
         <div class="btn-group pull-right">
         		<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-eye-open"></i> Tutorial</button>
         		<a class="btn btn-info btn-sm" id="imgLink" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="http://community.micropasts.org/category/crowdsourcing-support"><i class="glyphicon glyphicon-book"></i> Community Help</a>
+        		<a class="btn btn-info btn-sm" id="newTask" href="../newtask"><i class="glyphicon glyphicon-picture"></i> Different photomask?</a>
         </div>
         
         <h1 id="step1">Draw the outline and/or holes of the main object shown in the picture</h1>
@@ -135,7 +136,7 @@ a.ol-full-screen-true:after {
 
 <div class="row">
     <!-- Success and Error Messages for the user --> 
-    <div class="span6 offset2" style="height:50px">
+    <div class="col-md-6 col-md-offset-2" style="height:50px">
         <div id="success" class="alert alert-success" style="display:none;">
             <a class="close">×</a>
             <strong>Well done!</strong> Your answer has been saved
@@ -635,7 +636,7 @@ pybossa.presentTask(function(task, deferred) {
         $("#finish").fadeIn(500);
     }
     $('#imgLink').tooltip();
-    $('<a href=\"../newtask\" class=\"btn btn-sm btn-info\"><i class=\"glyphicon glyphicon-picture\"></i> Different photmask?</a>').insertAfter('#imgLink');
+
         
 });
 
