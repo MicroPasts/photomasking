@@ -185,6 +185,28 @@ a.ol-full-screen-true:after {
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Added the survey for 25 tasks -->
+<div id="survey25" class="modal fade" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Congrats for completing 25 tasks!</h4>
+      </div>
+      <div class="modal-body">
+        Thanks for contributing 25 tasks for the project. Now that you have been using MicroPasts for a while, we would like to know how you found it. <strong>Could you please answer a few questions in a short survey?</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
+        <a class="btn btn-large btn-success" href="https://docs.google.com/forms/d/1uczUGGYbrQ2FQfTtM8j4vfGr2qwcCMW6PLwzfvZZ6kI/viewform?embedded=true">Of course! Take me to the survey!</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- End of new survey -->
+
+
+
 <!-- Modal start -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -284,6 +306,10 @@ function loadUserProgress() {
         if ((data.done == 1) && ($.cookie('survey') === undefined)){
            $("#survey").modal('show');
            $.cookie('survey', 'shown', { path: '/'});
+        }
+        if ((data.done == 25) && ($.cookie('survey25') === undefined)){
+           $("#survey25").modal('show');
+           $.cookie('survey25', 'shown', { path: '/'});
         }
         var pct = Math.round((data.done*100)/data.total);
         $("#progress").css("width", pct.toString() +"%");
