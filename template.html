@@ -308,7 +308,7 @@ function loadUserProgress() {
            $("#survey").modal('show');
            $.cookie('surveyPhotoMAsk', 'shown', { path: '/'});
         }
-        if ((data.done == 25) && ($.cookie('survey25PhotoMask') === undefined)){
+        if ((data.done >= 25) && ($.cookie('survey25PhotoMask') === undefined)){
            $("#survey25").modal('show');
            $.cookie('survey25photoMask', 'shown', { path: '/'});
         }
