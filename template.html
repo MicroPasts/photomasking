@@ -303,6 +303,7 @@ a.ol-full-screen-true:after {
 <script>
 function loadUserProgress() {
     pybossa.userProgress('photomasking').done(function(data){
+    	console.log(data);
         if ((data.done == 1) && ($.cookie('survey') === undefined)){
            $("#survey").modal('show');
            $.cookie('survey', 'shown', { path: '/'});
