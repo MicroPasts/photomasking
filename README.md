@@ -1,6 +1,9 @@
 PyBossa photo masking application
 =================================
 
+[![DOI](https://www.zenodo.org/badge/18096465.svg)](https://www.zenodo.org/badge/latestdoi/18096465)
+
+
 This application has three files:
 
 *  createTasks.py: for creating the application in PyBossa, and fill it with some tasks.
